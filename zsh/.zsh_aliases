@@ -3,14 +3,22 @@ alias la='ls -A'
 alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# my aliases
+# shell
+alias chmody="chmod +x"
+
+# python
 alias py="python3"
 alias venv="source venv/bin/activate"
 alias grepy="ps aux | grep python"
+
+# zsh setup
+alias zalias="nano ~/.dotfiles/zsh/.zsh_aliases"
+alias zource="source ~/.zshrc"
+
+# nvidia commands
 alias nvid="watch -n 2 nvidia-smi"
 alias smi="nvidia-smi"
-alias zshalias="nano ~/.dotfiles/zsh/.zsh_aliases"
-alias chmody="chmod +x"
+
 
 # ollama commands
 alias golama="cd ~/.ollama/"
