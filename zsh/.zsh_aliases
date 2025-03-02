@@ -15,3 +15,8 @@ alias chmody="chmod +x"
 # ollama commands
 alias golama="cd ~/.ollama/"
 alias olla="ollama --model magnum --prompt ':'"
+
+# github
+alias gadd="git add ."
+alias gommit="git commit -m"
+alias gush="pit push origin main"
