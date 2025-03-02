@@ -10,6 +10,7 @@ alias grepy="ps aux | grep python"
 alias nvid="watch -n 2 nvidia-smi"
 alias smi="nvidia-smi"
 alias zshalias="nano ~/.dotfiles/zsh/.zsh_aliases"
+alias chmody="chmod +x"
 
 # ollama commands
 alias golama="cd ~/.ollama/"

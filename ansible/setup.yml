@@ -53,12 +53,6 @@
         regexp: "^plugins="
         create: yes
 
-    - name: Clone or update .dotfiles repo (spillbot/linux)
-      git:
-        repo: "https://github.com/spillbot/linux.git"
-        dest: "{{ ansible_env.HOME }}/.dotfiles"
-        version: main
-
     - name: Symlink Zsh aliases file from .dotfiles
       file:
         src: "{{ ansible_env.HOME }}/.dotfiles/zsh/.zsh_aliases"
@@ -72,19 +66,3 @@
         line: "source ~/.zsh_aliases"
         create: yes
 
-    - name: Ensure SSH service is enabled and running
-      systemd:
-        name: ssh
-        enabled: yes
-        state: started
-
-    - name: Ensure SSH allows key-based authentication
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: "^PasswordAuthentication"
-        line: "PasswordAuthentication no"
-
-    - name: Restart SSH service for changes to take effect
-      systemd:
-        name: ssh
-        state: restarted
