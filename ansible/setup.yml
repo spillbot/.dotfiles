@@ -1,0 +1,90 @@
+- name: Setup Zsh, Oh My Zsh, and SSH Configuration
+  hosts: localhost
+  connection: local
+  become: true  # Run as root for necessary operations
+
+  tasks:
+    - name: Update and upgrade system packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - zsh
+          - git
+          - curl
+          - wget
+        state: present
+
+    - name: Change default shell to zsh
+      user:
+        name: "{{ ansible_user | default(ansible_env.USER) }}"
+        shell: /usr/bin/zsh
+
+    - name: Check if Oh My Zsh is installed
+      stat:
+        path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+      register: oh_my_zsh
+
+    - name: Install Oh My Zsh if not installed
+      shell: |
+        RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      args:
+        creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+
+    - name: Clone zsh-autosuggestions plugin
+      git:
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        version: master
+
+    - name: Clone zsh-syntax-highlighting plugin
+      git:
+        repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        version: master
+
+    - name: Configure .zshrc to use plugins
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "plugins=(git zsh-autosuggestions zsh-syntax-highlighting)"
+        regexp: "^plugins="
+        create: yes
+
+    - name: Clone or update .dotfiles repo (spillbot/linux)
+      git:
+        repo: "https://github.com/spillbot/linux.git"
+        dest: "{{ ansible_env.HOME }}/.dotfiles"
+        version: main
+
+    - name: Symlink Zsh aliases file from .dotfiles
+      file:
+        src: "{{ ansible_env.HOME }}/.dotfiles/zsh/.zsh_aliases"
+        dest: "{{ ansible_env.HOME }}/.zsh_aliases"
+        state: link
+        force: yes
+
+    - name: Ensure .zshrc sources the aliases file
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "source ~/.zsh_aliases"
+        create: yes
+
+    - name: Ensure SSH service is enabled and running
+      systemd:
+        name: ssh
+        enabled: yes
+        state: started
+
+    - name: Ensure SSH allows key-based authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+
+    - name: Restart SSH service for changes to take effect
+      systemd:
+        name: ssh
+        state: restarted
