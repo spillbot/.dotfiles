@@ -5,6 +5,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # shell
 alias chmody="chmod +x"
+alias yo="echo $USER@:$HOST"
 
 # python
 alias py="python3"
@@ -18,7 +19,6 @@ alias zource="source ~/.zshrc"
 # nvidia commands
 alias nvid="watch -n 2 nvidia-smi"
 alias smi="nvidia-smi"
-
 
 # ollama commands
 alias golama="cd ~/.ollama/"
