@@ -76,6 +76,9 @@ plugins=(z zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 source ~/.dotfiles/zsh/.zsh_aliases
 
+export PATH="$HOME/.local/bin:$PATH"
+
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
