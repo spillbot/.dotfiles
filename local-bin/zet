@@ -1,0 +1,155 @@
+#!/bin/zsh
+
+# Define main directories (updated to match new tree)
+BASE_DIR="$HOME/obsidian"
+INBOX="$BASE_DIR/0_Inbox"
+ARCHIVE="$BASE_DIR/9_Archive"
+ZETTEL="$BASE_DIR/1_Zettelkasten"
+PROJECTS="$BASE_DIR/2_Projects"
+AREAS="$BASE_DIR/3_Areas"
+RESOURCES="$BASE_DIR/4_Resources"
+LITERATURE="$BASE_DIR/5_Literature"
+JOURNAL="$BASE_DIR/6_Journal"
+TEMPLATES="$BASE_DIR/8_Templates"
+
+
+# Function to show usage
+usage() {
+    echo "Usage:"
+    echo "  zet -h | --help           # Show this help message" 
+    echo "  zet -z <subject> <tags>   # Zettelkasten note"
+    echo "  zet -p <subject> <tags>   # Project note"
+    echo "  zet -a <subject> <tags>   # Area note"
+    echo "  zet -r <subject> <tags>   # Resource note"
+    echo "  zet -l <subject> <tags>   # Literature note"
+    echo "  zet -j <subject> <tags>   # Journal note"
+    echo "  zet <subject> <tags>      # Inbox note (no flag)"
+    echo "  zet --archive <filename.md>  # Move file to Archive"
+    echo "  zet -q <subject>          # Opens search query by subject"
+    echo "  zet -qt                   # Opens search by tag"
+    exit 1
+}
+
+
+# Search Function for Subjects (zet -q <query>)
+if [[ "$1" == "-q" ]]; then
+    if [[ -z "$2" ]]; then
+        echo "Error: You must provide a search term."
+        exit 1
+    fi
+    query="$2"
+    selected_file=$(find "$BASE_DIR" -type f -name "*.md" | fzf --query="$query")
+
+    if [[ -n "$selected_file" ]]; then
+        nvim "$selected_file"
+    else
+        echo "No matching subject found."
+    fi
+    exit 0
+fi
+
+# Function to search through indented YAML-style tags using fzf
+search_tags() {
+    # Find all markdown files and extract indented tags, then map them to their filenames
+    grep -rE "^\s*- ?.*" "$BASE_DIR" --include="*.md" |
+        awk -F: '{print $2 " [" $1 "]"}' |  # Format output as "tag [filename]"
+        fzf --preview 'batcat --color=always "$(echo {} | sed -E "s/.*\[(.*)\]/\1/")"' |  # Enable preview of selected file
+        sed 's/.*\[\(.*\)\]/\1/'  # Extract the filename from brackets
+}
+
+# Handle -qt flag for tag search
+if [[ "$1" == "-qt" ]]; then
+    SELECTED_FILE=$(search_tags)
+
+    if [[ -n "$SELECTED_FILE" ]]; then
+        echo "Opening: $SELECTED_FILE"
+        nvim "$SELECTED_FILE"
+    else
+        echo "No file selected."
+    fi
+    exit 0
+fi
+
+# Help Fuction
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    usage
+fi
+
+# Archive Function (runs from anywhere inside obsidian/)
+if [[ "$1" == "--archive" ]]; then
+    # Get the full path of the file
+    CURRENT_DIR=$(pwd)
+
+    # Ensure the command is run inside ~/obsidian or its subdirectories
+    if [[ "$CURRENT_DIR" != "$BASE_DIR"* ]]; then
+        echo "Error: You can only archive files from within the ~/obsidian directory."
+        exit 1
+    fi
+
+    # Ensure filename is provided
+    if [[ -z "$2" ]]; then
+        echo "Error: You must specify a filename to archive."
+        exit 1
+    fi
+
+    FILE_TO_ARCHIVE="$CURRENT_DIR/$2"
+
+    # Ensure file exists before moving
+    if [[ -f "$FILE_TO_ARCHIVE" ]]; then
+        mv "$FILE_TO_ARCHIVE" "$ARCHIVE/"
+        echo "Archived: $2 → $ARCHIVE/"
+    else
+        echo "Error: File not found in $CURRENT_DIR"
+    fi
+    exit 0
+fi
+
+# Ensure at least a subject is provided
+if [[ -z "$1" ]]; then
+    usage
+fi
+
+# Determine category flag (default to null if no flag is provided)
+FLAG="null"
+TARGET_DIR="$INBOX"
+case "$1" in
+    -z) FLAG="Zettelkasten" ; TARGET_DIR="$ZETTEL" ; shift ;;
+    -p) FLAG="Project" ; TARGET_DIR="$PROJECTS" ; shift ;;
+    -a) FLAG="Area" ; TARGET_DIR="$AREAS" ; shift ;;
+    -r) FLAG="Resource" ; TARGET_DIR="$RESOURCES" ; shift ;;
+    -l) FLAG="Literature"; TARGET_DIR="$LITERATURE" ; shift ;;
+    -j) FLAG="Journal"; TARGET_DIR="$JOURNAL" ; shift ;;
+esac
+
+# Assign subject and tags
+SUBJECT="$1"
+TAGS="$2"
+
+# Timestamp (only for ID line, not filename)
+TIMESTAMP=$(date +"%Y%m%d-%H%M")
+
+# Filename now only uses subject (no timestamp)
+FILENAME="${SUBJECT}.md"
+FILEPATH="$TARGET_DIR/$FILENAME"
+
+# Ensure target directory exists
+mkdir -p "$TARGET_DIR"
+
+# Create note with metadata
+if [[ ! -f "$FILEPATH" ]]; then
+    echo "Subject=$SUBJECT" > "$FILEPATH"
+    echo "ID=$TIMESTAMP" >> "$FILEPATH"
+    echo "FLAG=$FLAG" >> "$FILEPATH"
+    echo "CODE=null" >> "$FILEPATH"
+    echo "Tags: $TAGS" >> "$FILEPATH"
+    echo "" >> "$FILEPATH"  # Empty line for spacing
+    echo "Created new $FLAG note: $FILEPATH"
+else
+    echo "File already exists: $FILEPATH"
+fi
+
+# Ensure filesystem registers changes
+touch "$FILEPATH"
+
+# Open in Neovim
+nvim "$FILEPATH"

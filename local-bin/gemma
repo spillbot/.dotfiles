@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PROMPT="$*"
+MODEL="gemma3:27b"
+
+RAW=$(curl -s http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "'"$MODEL"'",
+    "prompt": "'"$PROMPT"'",
+    "stream": false
+  }')
+
+# Use jq if available, otherwise just echo raw response
+if command -v jq &>/dev/null; then
+  echo "$RAW" | jq -r .response
+else
+  echo "$RAW"
+fi
+

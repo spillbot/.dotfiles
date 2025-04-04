@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Check if filename is provided
+if [ -z "$1" ]; then
+    echo "Usage: bakup <filename>"
+    exit 1
+fi
+
+# Get the absolute path of the file
+FILE="$1"
+WORKINGDIR=$(dirname "$FILE")
+BASENAME=$(basename "$FILE")
+
+# Backup directory
+BACKUPDIR="$WORKINGDIR/bak"
+
+# Check if 'bak' directory exists, if not, create it
+if [ ! -d "$BACKUPDIR" ]; then
+    mkdir -p "$BACKUPDIR"
+fi
+
+# Get current timestamp in YYYYMMDD-HHmm format
+TIMESTAMP=$(date +"%Y%m%d-%H%M")
+
+# Copy file to backup directory with timestamped name
+cp "$FILE" "$BACKUPDIR/$BASENAME.$TIMESTAMP.bak"
+
+# Confirmation message
+echo "Backup of '$FILE' created at '$BACKUPDIR/$BASENAME.$TIMESTAMP.bak'"
+
