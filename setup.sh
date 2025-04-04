@@ -40,7 +40,7 @@ mkdir -p "$ZSH_CUSTOM/plugins"
 # === Neovim config ===
 echo "📝 Linking Neovim config..."
 mkdir -p "$HOME/.config/nvim"
-ln -sf "$HOME/.dotfiles/nvimm/init.vim" "$HOME/.config/nvim/init.vim"
+ln -sf "$HOME/.dotfiles/nvim/init.vim" "$HOME/.config/nvim/init.vim"
 
 # === Docker group setup ===
 echo "🐳 Adding user to docker group..."
