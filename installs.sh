@@ -18,7 +18,9 @@ sudo apt install -y \
   htop \
   wget \
   tmux \
-  fzf
+  fzf \
+  ranger \
+  neofetch
 
 echo "✅ Base packages (incl. tmux & fzf) installed."
 
