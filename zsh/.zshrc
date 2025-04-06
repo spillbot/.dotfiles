@@ -1,14 +1,33 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# === MY CUSTOM ZSH STUFF STARTS FROM HERE ===
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+# Custom ZSH Theme based on Roby Russel
+ZSH_THEME="my"
+
+# Plugins
+plugins=(git)
+plugins=(zsh-autosuggestions)
+plugins=(z zsh-autosuggestions)
+
+# Set sources
+
+source $ZSH/oh-my-zsh.sh
+source ~/.dotfiles/zsh/.zsh_aliases
+
+# Path Exports
+export PATH="$HOME/.local/bin:$PATH"
+export EDITOR=nvim
+export VISUAL=nvim
+
+
+# ===EVERYTHING BELOW HERE IS DEFAULT STUFF====
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="my"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,16 +89,6 @@ ZSH_THEME="my"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-plugins=(zsh-autosuggestions)
-plugins=(z zsh-autosuggestions)
-source $ZSH/oh-my-zsh.sh
-source ~/.dotfiles/zsh/.zsh_aliases
-
-export PATH="$HOME/.local/bin:$PATH"
-
-export EDITOR=nvim
-export VISUAL=nvim
 
 
 

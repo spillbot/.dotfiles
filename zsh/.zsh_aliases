@@ -6,6 +6,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # shell
 alias chmody="chmod +x"
 alias yo="echo $USER@:$HOST"
+alias bat="batcat"
 
 # python
 alias py="python3"
@@ -13,7 +14,7 @@ alias venv="source venv/bin/activate"
 alias grepy="ps aux | grep python"
 
 # zsh setup
-alias zalias="nano ~/.dotfiles/zsh/.zsh_aliases"
+alias zalias="nvim ~/.dotfiles/zsh/.zsh_aliases"
 alias zource="source ~/.zshrc"
 
 # nvidia commands
@@ -27,4 +28,4 @@ alias olla="ollama --model magnum --prompt ':'"
 # github
 alias gadd="git add ."
 alias gommit="git commit -m"
-alias gush="git push origin main"
+alias gush="git push origin"

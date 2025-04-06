@@ -37,6 +37,9 @@ mkdir -p "$ZSH_CUSTOM/plugins"
 [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]] && \
   git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 
+[[ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]] && \
+  git clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
+
 # === Neovim config ===
 echo "📝 Linking Neovim config..."
 mkdir -p "$HOME/.config/nvim"
@@ -45,7 +48,7 @@ ln -sf "$HOME/.dotfiles/nvim/init.vim" "$HOME/.config/nvim/init.vim"
 # === Docker group setup ===
 echo "🐳 Adding user to docker group..."
 sudo groupadd docker 2>/dev/null || true
-sudo usermod -aG docker "$USER"
+sudo usermod -aG docker "$(whoami)"
 echo "➡️ You may need to log out and back in for Docker group changes to take effect."
 
 echo "✅ Dotfiles setup complete. Restart your terminal to apply changes."
