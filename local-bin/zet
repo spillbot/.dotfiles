@@ -139,8 +139,6 @@ mkdir -p "$TARGET_DIR"
 if [[ ! -f "$FILEPATH" ]]; then
     echo "Subject=$SUBJECT" > "$FILEPATH"
     echo "ID=$TIMESTAMP" >> "$FILEPATH"
-    echo "FLAG=$FLAG" >> "$FILEPATH"
-    echo "CODE=null" >> "$FILEPATH"
     echo "Tags: $TAGS" >> "$FILEPATH"
     echo "" >> "$FILEPATH"  # Empty line for spacing
     echo "Created new $FLAG note: $FILEPATH"
