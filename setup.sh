@@ -40,10 +40,14 @@ mkdir -p "$ZSH_CUSTOM/plugins"
 [[ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]] && \
   git clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
 
-# === Neovim config ===
-echo "📝 Linking Neovim config..."
-mkdir -p "$HOME/.config/nvim"
-ln -sf "$HOME/.dotfiles/nvim/init.vim" "$HOME/.config/nvim/init.vim"
+# === Neovim and LazyVim setup ===
+echo "📝 Setting up LazyVim for Neovim..."
+
+# Remove the current Neovim configuration directory (optional, if you want to completely replace it)
+rm -rf "$HOME/.config/nvim"
+
+# Clone LazyVim's configuration repository
+git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
 
 # === Docker group setup ===
 echo "🐳 Adding user to docker group..."
