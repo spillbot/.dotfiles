@@ -7,6 +7,13 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias chmody="chmod +x"
 alias yo="echo $USER@:$HOST"
 alias bat="batcat"
+alias c="clear"
+alias vi="nvim"
+alias svi="sudo -e"
+alias h="cd ~/"
+
+# Hyprland
+alias hconfig="nvim ~/.config/hypr/hyprland.conf"
 
 # python
 alias py="python3"

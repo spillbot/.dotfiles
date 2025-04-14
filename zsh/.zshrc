@@ -4,7 +4,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 
 # Custom ZSH Theme based on Roby Russel
-ZSH_THEME="my"
+ZSH_THEME="robbyrussell"
 
 # Plugins
 plugins=(git)
@@ -20,6 +20,14 @@ source ~/.dotfiles/zsh/.zsh_aliases
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR=nvim
 export VISUAL=nvim
+
+# Locale
+
+# export LANG=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+
+
+
 
 
 # ===EVERYTHING BELOW HERE IS DEFAULT STUFF====
