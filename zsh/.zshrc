@@ -14,7 +14,7 @@ plugins=(z zsh-autosuggestions)
 # Set sources
 
 source $ZSH/oh-my-zsh.sh
-source ~/.dotfiles/zsh/.zsh_aliases
+source ~/.zsh_aliases
 
 # Path Exports
 export PATH="$HOME/.local/bin:$PATH"
