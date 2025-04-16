@@ -1,0 +1,7 @@
+
+
+bindsym $mod+Return exec alacritty
+
+exec --no-startup-id feh --bg-scale ~/.config/
+exec --no-startup-id picom --config ~/.config/picom.conf
+
